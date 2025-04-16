@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PerWb - Personal Website</title>
+  <style>
+    :root {
+      --bg-color: #eee;
+      --text-color: #333;
+      --container-bg: #fff;
+      --nav-bg: linear-gradient(45deg, #c31432, #240b36);
+      --highlight: #c31432;
+      --highlight-dark: #240b36;
+      --border-color: #ccc;
+      --card-bg: #fafafa;
+    }
+    /* Dark mode variables */
+    body.dark-mode {
+      --bg-color: #1a1a1a;
+      --text-color: #f0f0f0;
+      --container-bg: #2a2a2a;
+      --nav-bg: linear-gradient(45deg, #0f0c29, #302b63);
+      --highlight: #a000b5;
+      --highlight-dark: #4b0082;
+      --border-color: #555;
+      --card-bg: #3a3a3a;
+    }
+    /* Basic resets */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: var(--bg-color);
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-color);
+      transition: background 0.3s ease, color 0.3s ease;
+      min-height: 100vh;
+    }
+    /* Navigation styling */
+    nav {
+      background: var(--nav-bg);
+      padding: 10px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.3s ease;
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+    }
+    /* Dark/light toggle icon */
+    .theme-toggle-icon {
+      cursor: pointer;
+      color: #fff;
+      font-size: 20px;
+      margin-right: 15px;
+      user-select: none;
+    }
+    .theme-toggle-icon:hover {
+      opacity: 0.7;
+    }
+    /* Anime Watch Gear Icon */
+    .anime-settings-icon {
+      cursor: pointer;
+      color: #fff;
+      font-size: 20px;
+      margin-right: 15px;
+      user-select: none;
+    }
+    .anime-settings-icon:hover {
+      opacity: 0.7;
+    }
+    nav .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #fff;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0;
+      padding: 0;
+    }
+    nav ul li {
+      margin: 0 10px;
+      padding: 5px;
+      color: #fff;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    nav ul li:hover {
+      text-decoration: underline;
+    }
+    /* Dropdown styling for Anime Watch link */
+    .anime-settings-dropdown {
+      position: absolute;
+      top: 40px;
+      left: 10px;
+      background: var(--container-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.2);
+      padding: 10px;
+      display: none;
+      z-index: 101;
+      min-width: 200px;
+    }
+    .anime-settings-dropdown h4 {
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: var(--highlight);
+    }
+    .anime-settings-dropdown a {
+      display: block;
+      color: var(--highlight);
+      text-decoration: none;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+    }
+    .anime-settings-dropdown a:hover {
+      text-decoration: underline;
+    }
+    /* Main container styling */
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      background: var(--container-bg);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      transition: background 0.3s ease;
+    }
+    /* Sections */
+    .section {
+      display: none;
+      animation: fadeIn 0.5s ease-in;
+    }
+    .section.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    h2 {
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+      font-weight: normal;
+      transition: border-color 0.3s ease;
+    }
+    p {
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+    /* Form styling */
+    .form-group { margin-bottom: 15px; }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      outline: none;
+      transition: border-color 0.2s ease, background 0.3s ease;
+      background: #f9f9f9;
+    }
+    body.dark-mode input[type="text"],
+    body.dark-mode input[type="email"],
+    body.dark-mode input[type="password"],
+    body.dark-mode textarea {
+      background: #555;
+      color: #f0f0f0;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus,
+    textarea:focus {
+      border-color: var(--highlight);
+    }
+    button {
+      background: var(--highlight);
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: var(--highlight-dark);
+    }
+    /* Story card styling */
+    .story-card {
+      position: relative;
+      border: 1px solid var(--border-color);
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      background: var(--card-bg);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+    .story-card:hover {
+      background: #f3f3f3;
+    }
+    body.dark-mode .story-card:hover {
+      background: #555;
+    }
+    .delete-story-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: var(--highlight);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 2px 6px;
+      font-size: 12px;
+    }
+    .delete-story-btn:hover {
+      background: var(--highlight-dark);
+    }
+    .story-title {
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: var(--highlight);
+      font-size: 1.1rem;
+    }
+    .story-date {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 12px;
+    }
+    body.dark-mode .story-date {
+      color: #ccc;
+    }
+    /* Additional styling for Info section */
+    .info-section-content {
+      background: var(--container-bg);
+      color: var(--text-color);
+      padding: 15px;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    .info-header {
+      font-weight: 700;
+      font-size: 1.15rem;
+      margin-bottom: 10px;
+    }
+    /* New user list styling */
+    .user-list {
+      margin-top: 20px;
+    }
+    .user-list-item {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+      transition: background 0.3s ease;
+    }
+    body.dark-mode .user-list-item:hover {
+      background: #555;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-left">
+      <!-- Dark/Light Toggle Icon -->
+      <span id="themeToggle" class="theme-toggle-icon">🌙</span>
+      <!-- Anime Watch Gear Icon -->
+      <span id="animeSettings" class="anime-settings-icon">&#9881;</span>
+      <div class="logo">PerWb</div>
+      <!-- Dropdown for Anime Watch Links -->
+      <div id="animeDropdown" class="anime-settings-dropdown">
+        <h4>Anime Watch Free Web</h4>
+        <a href="https://animesugetv.to" target="_blank">AnimeSuGetv</a>
+      </div>
+    </div>
+    <ul>
+      <li data-section="home">Home</li>
+      <li data-section="about">About</li>
+      <li data-section="writeStory">Write Story</li>
+      <li data-section="readStory">Read Story</li>
+      <li data-section="contact">Contact</li>
+      <li data-section="feedback">Feedback</li>
+      <li data-section="information">Information</li>
+      <!-- New Sign Up link -->
+      <li data-section="signup">Sign Up</li>
+    </ul>
+  </nav>
+
+  <!-- Content Container -->
+  <div class="container">
+    <!-- Home Section (UPDATED) -->
+    <section id="home" class="section active">
+      <h2>Welcome to PerWb</h2>
+      <p>This is your personal space online. Explore the sections using the navigation above.</p>
+      <!-- New Quick Options Section -->
+      <h3>Quick Options</h3>
+      <ul>
+        <li><strong>Start a New Story</strong>: 
+          Head over to the <em>Write Story</em> section to begin writing your own tale.
+        </li>
+        <li><strong>Discover Stories</strong>: 
+          Check out <em>Read Story</em> for a list of shared experiences.
+        </li>
+        <li><strong>Get in Touch</strong>: 
+          Visit the <em>Contact</em> section for our email, or send in your thoughts at <em>Feedback</em>.
+        </li>
+        <li><strong>Sign Up</strong>: 
+          Create an account in the <em>Sign Up</em> section and unlock more features.
+        </li>
+      </ul>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+      <h2>About</h2>
+      <p>
+        Welcome to PerWb, a personal haven where creativity meets simplicity! I’m passionate about sharing experiences,
+        stories, and art in a warm, engaging environment. Every element—from the soft color highlights to carefully chosen images—reflects my personal journey.
+      </p>
+      <p>
+        Whether you’re here to write a story, read others’ experiences, or send feedback, I hope you feel at home.
+        Thanks for stopping by!
+      </p>
+    </section>
+
+    <!-- Write Story Section -->
+    <section id="writeStory" class="section">
+      <h2>Write Your Story</h2>
+      <p>Share your personal thoughts, fiction, or anything else. Give your story a title and description – your comfort is our priority.</p>
+      <div class="form-group">
+        <label for="storyTitle">Story Title:</label>
+        <input type="text" id="storyTitle" placeholder="Enter a short title..." />
+      </div>
+      <div class="form-group">
+        <label for="storyInput">Story Description:</label>
+        <textarea id="storyInput" rows="5" placeholder="Write your story here..."></textarea>
+      </div>
+      <button id="saveStoryBtn">Save Story</button>
+    </section>
+
+    <!-- Read Story Section -->
+    <section id="readStory" class="section">
+      <h2>Read Stories</h2>
+      <p>Browse through saved stories. Each story shows its title and submission date.</p>
+      <div id="storiesDisplay">
+        <!-- Stories will be appended here -->
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+      <h2>Contact</h2>
+      <p>Reach out via email: <a href="mailto:laldingliana900@gmail.com">laldingliana900@gmail.com</a></p>
+      <p>Or send us feedback in the Feedback section.</p>
+    </section>
+
+    <!-- Feedback Section -->
+    <section id="feedback" class="section">
+      <h2>Feedback</h2>
+      <p>We value your thoughts! Enter feedback below. (Your feedback will be submitted and then disappear.)</p>
+      <div class="form-group">
+        <label for="feedbackInput">Your Feedback:</label>
+        <textarea id="feedbackInput" rows="3" placeholder="Leave your feedback..."></textarea>
+      </div>
+      <button id="saveFeedbackBtn">Submit Feedback</button>
+    </section>
+
+    <!-- Information Section -->
+    <section id="information" class="section">
+      <h2>Information</h2>
+      <div class="info-section-content">
+        <div class="info-header">Website Creation Details</div>
+        <p>
+          This website was created by <strong>laldingliana</strong> on <em>April 16, 2025, at 9:31 PM</em>.
+          He is currently a student and continues to learn new technologies every day.
+          Feel free to explore the rest of the site for stories and more!
+        </p>
+      </div>
+    </section>
+
+    <!-- Sign Up Section -->
+    <section id="signup" class="section">
+      <h2>Sign Up</h2>
+      <p>Create an account to get the full experience!</p>
+      <div class="form-group">
+        <label for="signUpName">Name:</label>
+        <input type="text" id="signUpName" placeholder="Enter your name..." />
+      </div>
+      <div class="form-group">
+        <label for="signUpEmail">Email:</label>
+        <input type="email" id="signUpEmail" placeholder="Enter your email..." />
+      </div>
+      <div class="form-group">
+        <label for="signUpPassword">Password:</label>
+        <input type="password" id="signUpPassword" placeholder="Enter your password..." />
+      </div>
+      <button id="signUpBtn">Sign Up</button>
+
+      <hr/>
+
+      <h3>Registered Users</h3>
+      <div id="usersList">
+        <!-- Display list of users here -->
+      </div>
+    </section>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Navigation section switching
+    const navItems = document.querySelectorAll('nav ul li[data-section]');
+    const sections = document.querySelectorAll('.section');
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const target = item.getAttribute('data-section');
+        sections.forEach(sec => {
+          sec.id === target ? sec.classList.add('active') : sec.classList.remove('active');
+        });
+      });
+    });
+
+    // Dark/light mode toggle
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀' : '🌙';
+    });
+
+    // Anime Watch dropdown toggle using the gear icon
+    const animeSettings = document.getElementById('animeSettings');
+    const animeDropdown = document.getElementById('animeDropdown');
+    animeSettings.addEventListener('click', (e) => {
+      e.stopPropagation();
+      animeDropdown.style.display = animeDropdown.style.display === 'block' ? 'none' : 'block';
+    });
+    // Hide the dropdown if clicking outside
+    document.addEventListener('click', () => {
+      animeDropdown.style.display = 'none';
+    });
+
+    // ============= Story Management (Write/Read) =============
+    const saveStoryBtn = document.getElementById('saveStoryBtn');
+    const storyTitle = document.getElementById('storyTitle');
+    const storyInput = document.getElementById('storyInput');
+    const storiesDisplay = document.getElementById('storiesDisplay');
+    let stories = JSON.parse(localStorage.getItem('stories')) || [];
+
+    function renderStories() {
+      if (!stories.length) {
+        storiesDisplay.innerHTML = '<p>No stories yet. Write one to get started!</p>';
+        return;
+      }
+      storiesDisplay.innerHTML = stories
+        .map((storyObj, index) => `
+          <div class="story-card">
+            <button class="delete-story-btn" onclick="deleteStory(${index})">X</button>
+            <div class="story-title">${storyObj.title || 'Untitled Story'}</div>
+            <div class="story-date">${storyObj.date}</div>
+            <div class="story-content">${storyObj.content}</div>
+          </div>
+        `)
+        .join('');
+    }
+
+    function deleteStory(index) {
+      if (confirm('Are you sure you want to delete this story?')) {
+        stories.splice(index, 1);
+        localStorage.setItem('stories', JSON.stringify(stories));
+        renderStories();
+      }
+    }
+
+    saveStoryBtn.addEventListener('click', () => {
+      const titleText = storyTitle.value.trim();
+      const storyText = storyInput.value.trim();
+      if (!storyText) {
+        alert('Please write your story before saving.');
+        return;
+      }
+      const newStory = {
+        title: titleText,
+        content: storyText,
+        date: new Date().toLocaleString()
+      };
+      stories.push(newStory);
+      localStorage.setItem('stories', JSON.stringify(stories));
+      storyTitle.value = '';
+      storyInput.value = '';
+      renderStories();
+      alert('Story saved successfully!');
+    });
+
+    // Initialize the stories
+    renderStories();
+
+    // ============= Feedback Submission =============
+    const saveFeedbackBtn = document.getElementById('saveFeedbackBtn');
+    const feedbackInput = document.getElementById('feedbackInput');
+
+    saveFeedbackBtn.addEventListener('click', () => {
+      const fbText = feedbackInput.value.trim();
+      if (!fbText) {
+        alert('Please leave some feedback before submitting.');
+        return;
+      }
+      feedbackInput.value = '';
+      alert('Feedback submitted successfully!\nYour feedback will not be displayed publicly.');
+    });
+
+    // ============= Sign Up Management =============
+    const signUpBtn = document.getElementById('signUpBtn');
+    const signUpName = document.getElementById('signUpName');
+    const signUpEmail = document.getElementById('signUpEmail');
+    const signUpPassword = document.getElementById('signUpPassword');
+    const usersList = document.getElementById('usersList');
+
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+
+    function renderUsers() {
+      if (!users.length) {
+        usersList.innerHTML = '<p>No registered users yet. Be the first to sign up!</p>';
+        return;
+      }
+      usersList.innerHTML = users
+        .map(user => `
+          <div class="user-list-item">
+            <strong>Name:</strong> ${user.name} <br />
+            <strong>Email:</strong> ${user.email}
+          </div>
+        `)
+        .join('');
+    }
+
+    signUpBtn.addEventListener('click', () => {
+      const nameValue = signUpName.value.trim();
+      const emailValue = signUpEmail.value.trim();
+      const passwordValue = signUpPassword.value.trim();
+
+      // Basic validation
+      if (!nameValue || !emailValue || !passwordValue) {
+        alert('Please fill out all fields.');
+        return;
+      }
+
+      // Example check: ensure email is not already registered
+      const emailExists = users.some(u => u.email === emailValue);
+      if (emailExists) {
+        alert('This email is already registered. Please use a different one.');
+        return;
+      }
+
+      // Create new user object
+      const newUser = {
+        name: nameValue,
+        email: emailValue,
+        password: passwordValue, // In a real site, you'd hash this
+        registeredAt: new Date().toLocaleString()
+      };
+
+      users.push(newUser);
+      localStorage.setItem('users', JSON.stringify(users));
+
+      // Clear the fields
+      signUpName.value = '';
+      signUpEmail.value = '';
+      signUpPassword.value = '';
+
+      // Re-render users list
+      renderUsers();
+      alert('Sign Up successful!');
+    });
+
+    // Initialize user list
+    renderUsers();
+  </script>
+</body>
+</html>
